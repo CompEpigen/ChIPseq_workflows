@@ -74,8 +74,6 @@ steps:
         source: adapter2
       is_paired_end:
         source: is_paired_end
-      sample_id:
-        source: sample_id
     out:
       - pre_trim_fastqc_zip
       - pre_trim_fastqc_html

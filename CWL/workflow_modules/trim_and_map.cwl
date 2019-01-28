@@ -32,8 +32,6 @@ inputs:
     type: boolean
   max_mapping_insert_length:
     type: long?
-  sample_id:
-    type: string
         
 ### WORKFLOW STEPS:
 ##################################################
@@ -85,8 +83,6 @@ steps:
         source: is_paired_end
       max_mapping_insert_length:
         source: max_mapping_insert_length
-      output_basename:
-        source: sample_id
     out:
       - sam
       - bowtie2_log

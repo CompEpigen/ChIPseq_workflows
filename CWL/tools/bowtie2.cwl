@@ -31,7 +31,7 @@ arguments:
   - valueFrom: $(inputs.output_basename + ".sam") # set the number of threads
     prefix: "-S"
     position: 6
-stderr: $( inputs.output_basename + ".bowtie2_stderr") # log file
+stderr: $( inputs.fastq1.nameroot + ".bowtie2_stderr") # log file
   
 
 inputs:
@@ -76,9 +76,6 @@ inputs:
     inputBinding:
       prefix: --maxins
       position: 1
-  output_basename:
-    type: string
-
       
 outputs:
   sam:
