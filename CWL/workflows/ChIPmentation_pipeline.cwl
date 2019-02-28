@@ -118,24 +118,6 @@ steps:
     out:
        - bam_sorted_indexed
   
-  generate_coverage_tracks:
-    run: "../tools/deeptools_bamCoverage.cwl"
-    in:
-      bam:
-        source: indexing_shifted_bam/bam_sorted_indexed
-      is_paired_end:
-        source: is_paired_end
-      fragment_size:
-        source: fragment_size
-      effective_genome_size:
-        source: effective_genome_size
-      bin_size:
-        source: bin_size
-      ignoreForNormalization:
-        source: ignoreForNormalization
-    out:
-      - bigwig
-  
   chip_qc:
     run: "../workflow_modules/chip_qc.cwl"
     in:
@@ -157,6 +139,25 @@ steps:
       - qc_crosscorr_plot
       - qc_phantompeakqualtools_stderr
       - qc_phantompeakqualtools_stdout
+      - fragment_size
+
+  generate_coverage_tracks:
+    run: "../tools/deeptools_bamCoverage.cwl"
+    in:
+      bam:
+        source: indexing_shifted_bam/bam_sorted_indexed
+      is_paired_end:
+        source: is_paired_end
+      fragment_size:
+        source: chip_qc/fragment_size
+      effective_genome_size:
+        source: effective_genome_size
+      bin_size:
+        source: bin_size
+      ignoreForNormalization:
+        source: ignoreForNormalization
+    out:
+      - bigwig
 
   create_summary_qc_report:
     doc: |
