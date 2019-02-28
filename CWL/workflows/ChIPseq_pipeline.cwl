@@ -40,7 +40,7 @@ inputs:
       type: array
       items: [string, "null"]
   fragment_size:
-    type: long?
+    type: int?
   is_paired_end:
     type: boolean
   effective_genome_size:
@@ -100,24 +100,6 @@ steps:
       - picard_markdup_stdout
       - bam
   
-  generate_coverage_tracks:
-    run: "../tools/deeptools_bamCoverage.cwl"
-    in:
-      bam:
-        source: merge_duprem_filter/bam
-      is_paired_end:
-        source: is_paired_end
-      fragment_size:
-        source: fragment_size
-      effective_genome_size:
-        source: effective_genome_size
-      bin_size:
-        source: bin_size
-      ignoreForNormalization:
-        source: ignoreForNormalization
-    out:
-      - bigwig
-  
   chip_qc:
     run: "../workflow_modules/chip_qc.cwl"
     in:
@@ -139,6 +121,25 @@ steps:
       - qc_crosscorr_plot
       - qc_phantompeakqualtools_stderr
       - qc_phantompeakqualtools_stdout
+      - fragment_size
+
+  generate_coverage_tracks:
+    run: "../tools/deeptools_bamCoverage.cwl"
+    in:
+      bam:
+        source: merge_duprem_filter/bam
+      is_paired_end:
+        source: is_paired_end
+      fragment_size:
+        source: chip_qc/fragment_size
+      effective_genome_size:
+        source: effective_genome_size
+      bin_size:
+        source: bin_size
+      ignoreForNormalization:
+        source: ignoreForNormalization
+    out:
+      - bigwig
 
     
   create_summary_qc_report:

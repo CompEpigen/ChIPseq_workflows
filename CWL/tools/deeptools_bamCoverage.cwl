@@ -48,7 +48,7 @@ inputs:
     type: boolean
   fragment_size:
     doc: mean library fragment size; used to extend the reads
-    type: long?
+    type: int?
   effective_genome_size:
     doc: |
       the effectively mappable genome size, 

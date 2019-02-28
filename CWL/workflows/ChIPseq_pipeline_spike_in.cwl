@@ -40,7 +40,7 @@ inputs:
       type: array
       items: [string, "null"]
   fragment_size:
-    type: long?
+    type: int?
   is_paired_end:
     type: boolean
   effective_genome_size:

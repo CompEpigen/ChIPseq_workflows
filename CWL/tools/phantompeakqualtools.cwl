@@ -52,6 +52,12 @@ outputs:
     type: File?
     outputBinding:
       glob:  "*.pdf"
+  qc_crosscorr_fragment_size:
+    type: int?
+    outputBinding:
+      glob:  "*.spp.out"
+      loadContents: true
+      outputEval: $(parseInt(self[0].contents.split('\t')[2]))
   qc_phantompeakqualtools_stderr:
     type: stderr
   qc_phantompeakqualtools_stdout:
