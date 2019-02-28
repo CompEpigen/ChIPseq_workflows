@@ -23,5 +23,5 @@ adapter2:
   - null
   - null
 is_paired_end: true
-fragment_size: 10
+fragment_size: null
 effective_genome_size: 199
