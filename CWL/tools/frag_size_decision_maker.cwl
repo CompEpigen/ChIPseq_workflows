@@ -17,7 +17,7 @@ expression: |
   ${
       var fragment_size = inputs.user_def_fragment_size;
       if( fragment_size == null ){
-          fragment_size = cc_fragment_size;
+          fragment_size = inputs.cc_fragment_size;
       }
       return { "fragment_size": fragment_size }
   }
