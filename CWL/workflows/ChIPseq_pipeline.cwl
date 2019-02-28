@@ -109,7 +109,7 @@ steps:
         source: merge_duprem_filter/bam
       is_paired_end:
         source: is_paired_end
-      fragment_size:
+      user_def_fragment_size:
         source: fragment_size
     out:
       - qc_plot_coverage_plot

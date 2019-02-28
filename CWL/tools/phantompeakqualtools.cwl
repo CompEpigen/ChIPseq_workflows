@@ -31,7 +31,7 @@ arguments:
     separate: false
     position: 100
 stderr: $(inputs.bam.nameroot + ".phantompeakqualtools_stderr")
-stderr: $(inputs.bam.nameroot + ".phantompeakqualtools_stdout") # Naming important for multiqcs
+stdout: $(inputs.bam.nameroot + ".phantompeakqualtools_stdout") # Naming important for multiqcs
   
 inputs:
   bam:

@@ -11,7 +11,7 @@ inputs:
   bam:
     type: File
     secondaryFiles: .bai
-  fragment_size:
+  user_def_fragment_size:
     type: int?
   is_paired_end:
     type: boolean
@@ -37,7 +37,7 @@ steps:
     run: "../tools/frag_size_decision_maker.cwl"
     in:
       user_def_fragment_size:
-        source: fragment_size
+        source: user_def_fragment_size
       cc_fragment_size:
         source: qc_phantompeakqualtools/qc_crosscorr_fragment_size
     out:
