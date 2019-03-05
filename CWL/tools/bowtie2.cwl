@@ -28,7 +28,7 @@ arguments:
           return "-U";
         }
       }
-  - valueFrom: $(inputs.output_basename + ".sam") # set the number of threads
+  - valueFrom: $(inputs.fastq1.nameroot + ".sam") # set the number of threads
     prefix: "-S"
     position: 6
 stderr: $( inputs.fastq1.nameroot + ".bowtie2_stderr") # log file
