@@ -83,7 +83,7 @@ inputs:
             return null
           }
           else{
-            (1.0 / parseFloat(self)) 
+            return (1.0 / parseFloat(self)) 
           }
         }
 
