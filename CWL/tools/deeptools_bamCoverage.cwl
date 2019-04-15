@@ -13,8 +13,6 @@ hints:
 
 baseCommand: ["bamCoverage"]
 arguments:  
-  - valueFrom: --extendReads
-    position: 1
   - valueFrom: |
       ${
         if ( inputs.is_paired_end ){
@@ -24,14 +22,23 @@ arguments:
           return inputs.fragment_size;
         }
       }
-    position: 2
+    prefix: --extendReads
+    position: 1
   - valueFrom: $(inputs.bam.nameroot + ".bigwig")
     prefix: --outFileName
     position: 10
   - valueFrom: "bigwig"
     prefix: --outFileFormat
     position: 10
-  - valueFrom: "RPGC"
+  - valueFrom: |
+        ${ 
+          if( inputs.spike_in_count == null ){
+            return "RPGC"
+          }
+          else{
+            return null 
+          }
+        }
     prefix: --normalizeUsing
     position: 10
   
