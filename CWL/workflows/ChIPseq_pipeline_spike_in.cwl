@@ -55,9 +55,6 @@ inputs:
       - ^.4.bt2
       - ^.rev.1.bt2
       - ^.rev.2.bt2
-  expected_spike_in_counts:
-    type: long
-    default: 1000
   bin_size:
     type: int?
     default: 10
