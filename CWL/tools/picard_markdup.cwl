@@ -30,6 +30,10 @@ arguments:
     position: 15
   - valueFrom: "VALIDATION_STRINGENCY=SILENT"
     position: 16
+  - valueFrom: "VERBOSITY=INFO"
+    position: 17
+  - valueFrom: "QUIET=false"
+    position: 17
 stdout: $(inputs.bam_sorted.nameroot + ".picard_markdup.stdout")
 
 inputs:
