@@ -34,7 +34,7 @@ arguments:
     position: 17
   - valueFrom: "QUIET=false"
     position: 17
-stdout: $(inputs.bam_sorted.nameroot + ".picard_markdup.stdout")
+stderr: $(inputs.bam_sorted.nameroot + ".picard_markdup.log")
 
 inputs:
   bam_sorted:
@@ -55,6 +55,6 @@ outputs:
     type: File
     outputBinding:
       glob: $(inputs.bam_sorted.nameroot + "_duprem.bam")
-  picard_markdup_stdout:
-    type: stdout
+  picard_markdup_log:
+    type: stderr
     
