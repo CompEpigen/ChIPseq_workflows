@@ -76,6 +76,7 @@ inputs:
     inputBinding:
       prefix: --maxins
       position: 1
+
       
 outputs:
   sam:

@@ -2,7 +2,6 @@ cwlVersion: v1.0
 class: CommandLineTool
 requirements:
   InlineJavascriptRequirement: {}
-  StepInputExpressionRequirement: {}
 hints:
   ResourceRequirement:
     coresMin: 1
@@ -10,13 +9,9 @@ hints:
     #tmpdirMin: 10000
   DockerRequirement:
     dockerPull: kerstenbreuer/samtools:1.7
-  
-### BASE COMMAND AND ARGUMENTS:
-##################################################
+
 baseCommand: ["samtools", "merge"]
 
-### INPUT PART:
-##################################################
 inputs:
   - id: output_name
     doc: name of merged bam file
@@ -30,9 +25,7 @@ inputs:
       items: File
     inputBinding:
       position: 2
- 
-### OUTPUT PART:
-##################################################
+
 outputs:
   - id: bam_merged
     type: File
