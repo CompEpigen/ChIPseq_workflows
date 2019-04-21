@@ -2,6 +2,8 @@
 
 cwlVersion: v1.0
 class: CommandLineTool
+requirements:
+  InlineJavascriptRequirement: {}
 hints:
   ResourceRequirement:
     coresMin: 1
@@ -57,7 +59,7 @@ arguments:
         }
       }
     position: 3
-stdout: $(inputs.bam.nameroot + "_filt.bam")
+stdout: $(inputs.bam.nameroot)_filt.bam
 
 outputs:
   bam_filtered:
