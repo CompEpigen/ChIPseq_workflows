@@ -97,7 +97,7 @@ steps:
     out:
       - post_filter_fastqc_zip
       - post_filter_fastqc_html
-      - picard_markdup_stdout
+      - picard_markdup_log
       - bam
   
   chip_qc:
@@ -169,7 +169,7 @@ steps:
           - chip_qc/qc_crosscorr_plot
           - chip_qc/qc_phantompeakqualtools_stdout
           - chip_qc/qc_crosscorr_summary
-          - merge_duprem_filter/picard_markdup_stdout
+          - merge_duprem_filter/picard_markdup_log
         linkMerge: merge_flattened
       report_name:
         source: sample_id
@@ -235,9 +235,9 @@ outputs:
     type: File
     secondaryFiles: .bai
     outputSource: merge_duprem_filter/bam
-  picard_markdup_stdout:
+  picard_markdup_log:
     type: File
-    outputSource: merge_duprem_filter/picard_markdup_stdout
+    outputSource: merge_duprem_filter/picard_markdup_log
 
   bigwig:
     type: File
