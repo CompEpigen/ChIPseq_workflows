@@ -6,6 +6,7 @@ This repository includes workflows for upstream processing of ChIP-seq and Cut&R
 Following workflows are available in the directory `./CWL/workflows`:
   * `ChIPseq_pipeline.cwl` - works with single or paired end standard ChIPseq data
   * `ChIPseq_pipeline_spike_in.cwl` - same as above but with support for spike-in normalization
+  * `CUT&RUN_pipeline.cwl` - specialized version of the ChIPseq spike-in pipeline for CUT&RUN
   * `ChIPmentation_pipeline.cwl` - works with single or paired end ChIPmentation data  
   
 They depend on subworkflows located in `./CWL/workflow_modules` and CommandLineTool wrapper located in `./CWL/tools`.
