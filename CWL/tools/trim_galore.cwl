@@ -183,14 +183,14 @@ outputs:
       items: File
     outputBinding:
       glob:  "*trimming_report.txt"
-  post_trim_fastqc_html:
+  trimmed_fastqc_html:
     doc: html report of post-trimming fastqc
     type:
       type: array # since one or two matches (single/paired end)
       items: File
     outputBinding:
       glob: "*fastqc.html"
-  post_trim_fastqc_zip:
+  trimmed_fastqc_zip:
     doc: all data of post-trimming fastqc e.g. figures
     type:
       type: array

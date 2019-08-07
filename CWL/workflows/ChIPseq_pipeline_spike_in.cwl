@@ -85,13 +85,13 @@ steps:
       is_paired_end:
         source: is_paired_end
     out:
-      - pre_trim_fastqc_zip
-      - pre_trim_fastqc_html
+      - raw_fastqc_zip
+      - raw_fastqc_html
       - fastq1_trimmed
       - fastq2_trimmed
       - trim_galore_log
-      - post_trim_fastqc_html
-      - post_trim_fastqc_zip
+      - trimmed_fastqc_html
+      - trimmed_fastqc_zip
       - bam
       - bowtie2_log
 
@@ -105,8 +105,8 @@ steps:
       is_paired_end:
         source: is_paired_end
     out:
-      - post_filter_fastqc_zip
-      - post_filter_fastqc_html
+      - duprem_fastqc_zip
+      - duprem_fastqc_html
       - picard_markdup_log
       - bam
   
@@ -179,17 +179,17 @@ steps:
     in:
       qc_files_array_of_array:
         source:
-          - trim_and_map/pre_trim_fastqc_zip
-          - trim_and_map/pre_trim_fastqc_html
-          - trim_and_map/post_trim_fastqc_html
-          - trim_and_map/post_trim_fastqc_zip
+          - trim_and_map/raw_fastqc_zip
+          - trim_and_map/raw_fastqc_html
+          - trim_and_map/trimmed_fastqc_html
+          - trim_and_map/trimmed_fastqc_zip
           - trim_and_map/trim_galore_log
         linkMerge: merge_flattened
       qc_files_array:
         source:
           - trim_and_map/bowtie2_log
-          - merge_duprem_filter/post_filter_fastqc_zip
-          - merge_duprem_filter/post_filter_fastqc_html
+          - merge_duprem_filter/duprem_fastqc_zip
+          - merge_duprem_filter/duprem_fastqc_html
           - chip_qc/qc_plot_coverage_tsv
           - chip_qc/qc_plot_coverage_plot
           - chip_qc/qc_plot_fingerprint_tsv
@@ -209,57 +209,57 @@ steps:
 ### OUTPUTS:
 ##################################################
 outputs:
-  pre_trim_fastqc_zip:
+  raw_fastqc_zip:
     type:
       type: array
       items: 
         type: array
         items: File
-    outputSource: trim_and_map/pre_trim_fastqc_zip
-  pre_trim_fastqc_html:
+    outputSource: trim_and_map/raw_fastqc_zip
+  raw_fastqc_html:
     type:
       type: array
       items: 
         type: array
         items: File
-    outputSource: trim_and_map/pre_trim_fastqc_html
+    outputSource: trim_and_map/raw_fastqc_html
   trim_galore_log:
     type:
       type: array
       items: 
         type: array
         items: File
-    outputSource: trim_and_map/pre_trim_fastqc_zip
-  post_trim_fastqc_html:
+    outputSource: trim_and_map/raw_fastqc_zip
+  trimmed_fastqc_html:
     type:
       type: array
       items: 
         type: array
         items: File
-    outputSource: trim_and_map/post_trim_fastqc_html
-  post_trim_fastqc_zip:
+    outputSource: trim_and_map/trimmed_fastqc_html
+  trimmed_fastqc_zip:
     type:
       type: array
       items: 
         type: array
         items: File
-    outputSource: trim_and_map/post_trim_fastqc_zip
+    outputSource: trim_and_map/trimmed_fastqc_zip
   bowtie2_log:
     type:
       type: array
       items: File
     outputSource: trim_and_map/bowtie2_log
 
-  post_filter_fastqc_zip:
+  duprem_fastqc_zip:
     type:
       type: array
       items: File
-    outputSource: merge_duprem_filter/post_filter_fastqc_zip
-  post_filter_fastqc_html:
+    outputSource: merge_duprem_filter/duprem_fastqc_zip
+  duprem_fastqc_html:
     type:
       type: array
       items: File
-    outputSource: merge_duprem_filter/post_filter_fastqc_html
+    outputSource: merge_duprem_filter/duprem_fastqc_html
   bam:
     type: File
     secondaryFiles: .bai

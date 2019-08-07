@@ -36,7 +36,7 @@ inputs:
 ### WORKFLOW STEPS:
 ##################################################
 steps:
-  qc_pre_trim:
+  qc_raw:
     doc: fastqc - quality control for trimmed fastq
     run: "../tools/fastqc.cwl"
     in:
@@ -48,7 +48,7 @@ steps:
       - fastqc_zip
       - fastqc_html
 
-  adaptor_trimming_and_qc_post_trim:
+  adaptor_trimming_and_qc_trimmed:
     doc: trim galore - adapter trimming using trim_galore
     run: "../tools/trim_galore.cwl"
     in:
@@ -66,17 +66,17 @@ steps:
       - fastq1_trimmed_unpaired
       - fastq2_trimmed_unpaired
       - trim_galore_log
-      - post_trim_fastqc_html
-      - post_trim_fastqc_zip
+      - trimmed_fastqc_html
+      - trimmed_fastqc_zip
 
   mapping:
     doc: bowite2 - mapper, produces sam file
     run: "../tools/bowtie2.cwl"
     in:
       fastq1:
-        source: adaptor_trimming_and_qc_post_trim/fastq1_trimmed
+        source: adaptor_trimming_and_qc_trimmed/fastq1_trimmed
       fastq2:
-        source: adaptor_trimming_and_qc_post_trim/fastq2_trimmed
+        source: adaptor_trimming_and_qc_trimmed/fastq2_trimmed
       reference_index:
         source: reference
       is_paired_end:
@@ -106,37 +106,37 @@ steps:
 ### OUTPUTS:
 ##################################################
 outputs:
-  pre_trim_fastqc_zip:
+  raw_fastqc_zip:
     type:
       type: array
       items: File
-    outputSource: qc_pre_trim/fastqc_zip
-  pre_trim_fastqc_html:
+    outputSource: qc_raw/fastqc_zip
+  raw_fastqc_html:
     type:
       type: array
       items: File
-    outputSource: qc_pre_trim/fastqc_html
+    outputSource: qc_raw/fastqc_html
   fastq1_trimmed:
     type: File
-    outputSource: adaptor_trimming_and_qc_post_trim/fastq1_trimmed
+    outputSource: adaptor_trimming_and_qc_trimmed/fastq1_trimmed
   fastq2_trimmed:
     type: File
-    outputSource: adaptor_trimming_and_qc_post_trim/fastq2_trimmed
+    outputSource: adaptor_trimming_and_qc_trimmed/fastq2_trimmed
   trim_galore_log:
     type:
       type: array
       items: File
-    outputSource: adaptor_trimming_and_qc_post_trim/trim_galore_log
-  post_trim_fastqc_html:
+    outputSource: adaptor_trimming_and_qc_trimmed/trim_galore_log
+  trimmed_fastqc_html:
     type:
       type: array
       items: File
-    outputSource: adaptor_trimming_and_qc_post_trim/post_trim_fastqc_html
-  post_trim_fastqc_zip:
+    outputSource: adaptor_trimming_and_qc_trimmed/trimmed_fastqc_html
+  trimmed_fastqc_zip:
     type:
       type: array
       items: File
-    outputSource: adaptor_trimming_and_qc_post_trim/post_trim_fastqc_zip
+    outputSource: adaptor_trimming_and_qc_trimmed/trimmed_fastqc_zip
   bowtie2_log:
     type: File
     outputSource: mapping/bowtie2_log
