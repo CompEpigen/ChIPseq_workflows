@@ -5,7 +5,6 @@ hints:
   ResourceRequirement:
     coresMin: 4
     ramMin: 15000
-    #ramMin: 200 for testing on small device
   DockerRequirement:
     dockerPull: kerstenbreuer/samtools:1.7
 
