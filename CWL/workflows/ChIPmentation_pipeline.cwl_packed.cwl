@@ -1157,10 +1157,32 @@
             "class": "CommandLineTool",
             "requirements": [
                 {
-                    "class": "InlineJavascriptRequirement"
+                    "listing": [
+                        {
+                            "entryname": "tn5_overhang_correction.sh",
+                            "entry": "BAM=\"$1\"\nOUTPUT_SUFFIX=\"$2\"\nIS_PAIRED_END=\"$3\"\nif [[ \"$IS_PAIRED_END\" == TRUE ]]\nthen\n  samtools view -h -f 3 -F 16 \"$BAM\" | awk -f shifting_paired_end_plus_reads.awk > correcting.sam\n  samtools view -f 19 \"$BAM\" | awk -f shifting_paired_end_minus_reads.awk >> correcting.sam\nelse\n  samtools view -h -F 16 \"$BAM\" | awk -f shifting_single_end_plus_reads.awk > correcting.sam\n  samtools view -f 16 \"$BAM\" | awk -f shifting_single_end_minus_reads.awk >> correcting.sam\nfi\nOUTFILE=\"\\${BAM##*/}\"\nOUTFILE=\"\\${OUTFILE%.bam}_\\${OUTPUT_SUFFIX}.bam\"\nsamtools sort -@ $(runtime.cores) -O bam -T sorting.bam -o \"$OUTFILE\" correcting.sam\n"
+                        },
+                        {
+                            "entryname": "shifting_paired_end_plus_reads.awk",
+                            "entry": "BEGIN {OFS=\"\\t\"}\n{\n  if ( $1 ~ /^@/) { print }\n  else if ($9>=38) {\n    $4=$4+4; $8=$8-5; $9=$9-9; $11=\"*\";\n    if ($8>0){ print } else {$8=1; print}\n  }\n  else if ($9<=-38) {\n    $4=$4+4; $8=$8-5; $9=$9+9; $11=\"*\";\n    if ($8>0){ print } else {$8=1; print}\n  }\n}\n"
+                        },
+                        {
+                            "entryname": "shifting_paired_end_minus_reads.awk",
+                            "entry": "BEGIN {OFS=\"\\t\"}\n{\n  if ($9>=38) {\n    $4=$4-5; $8=$8+4; $9=$9-9; $11=\"*\";  \n    if ($4>0){ print } else {$4=1; print}\n  }\n  else if ($9<=-38) {\n    $4=$4-5; $8=$8+4; $9=$9+9; $11=\"*\"; \n    if ($4>0){ print } else {$4=1; print}\n  }\n}\n"
+                        },
+                        {
+                            "entryname": "shifting_single_end_plus_reads.awk",
+                            "entry": "BEGIN {OFS=\"\\t\"}\n{\n  if ( $1 ~ /^@/) { print }\n  else {\n    $4=$4+4; $7=\"*\"; $8=0; $9=0; $11=\"*\"; print\n  }\n}\n"
+                        },
+                        {
+                            "entryname": "shifting_single_end_minus_reads.awk",
+                            "entry": "BEGIN {OFS=\"\\t\"}\n{\n  $4=$4-5; $7=\"*\"; $8=0; $9=0; $11=\"*\"; print\n}\n"
+                        }
+                    ],
+                    "class": "InitialWorkDirRequirement"
                 },
                 {
-                    "class": "StepInputExpressionRequirement"
+                    "class": "InlineJavascriptRequirement"
                 }
             ],
             "hints": [
@@ -1176,25 +1198,30 @@
             ],
             "baseCommand": [
                 "bash",
-                "-c"
-            ],
-            "arguments": [
-                {
-                    "valueFrom": "${\n  var cmd_line = \"\";\n  \n  if ( inputs.is_paired_end ){ // for paired end data\n                                // unpaired will be removed\n  \n    ////// shift + strand reads\n    cmd_line += \"samtools view -h -f 3 -F 16 \" + inputs.bam.path; // only properly paired reads with the\n                                          // first read on the + strand are output;\n                                          // the header is included\n    \n    cmd_line += \" | awk  \\'BEGIN {OFS=\\\"\\\\t\\\"} \" +\n                \"{ \" + \n                \"if ( $1 ~ /^@/) { print }\" + //header lines are printed unmodified\n                \"else if ($9>=38) { \" + \n                \"$4=$4+4; $8=$8-5; $9=$9-9; $11=\\\"*\\\"; if ($8>0){ print } else {$8=1; print}}\" + // read start positions are shifted\n                \"else if ($9<=-38) { \" + \n                \"$4=$4+4; $8=$8-5; $9=$9+9; $11=\\\"*\\\"; if ($8>0){ print } else {$8=1; print}}\" + // read start positions are shifted\n                \"}\\' > correcting.sam\";\n    ///// shift - strand reads      \n    cmd_line += \" ; samtools view -f 19 \" + inputs.bam.path; // only properly paired reads with the\n                                          // first read on the - strand are output;\n                                          // the header is excluded\n    \n    cmd_line += \" | awk  \\'BEGIN {OFS=\\\"\\\\t\\\"} \" +\n                \"{ \" + \n                \"if ($9>=38) { \" + \n                \"$4=$4-5; $8=$8+4; $9=$9-9; $11=\\\"*\\\";  if ($4>0){ print } else {$4=1; print}}\" + // read start positions are shifted\n                \"else if ($9<=-38) { \" + \n                \"$4=$4-5; $8=$8+4; $9=$9+9; $11=\\\"*\\\"; if ($4>0){ print } else {$4=1; print}}\" + // read start positions are shifted\n                \"}\\' >> correcting.sam\";\n                \n    \n  }\n  else { // for single end data\n  \n    ////// shift + strand reads\n    cmd_line += \"samtools view -h -F 16 \" + inputs.bam.path; // paired end as well as\n                                          // - strand reads are excluded\n                                          // the header is included\n    \n    cmd_line += \" | awk  \\'BEGIN {OFS=\\\"\\\\t\\\"} \" +\n                \"{ \" + \n                \"if ( $1 ~ /^@/ ) { print }\" + //header lines are printed unmodified\n                \"else { $4=$4+4; $7=\\\"*\\\"; $8=0; $9=0; $11=\\\"*\\\"; print}\" + // read start positions are shifted\n                \"}\\' > correcting.sam\";\n    ///// shift - strand reads      \n    cmd_line += \" ; samtools view -f 16 \" + inputs.bam.path; // paired end as well as\n                                          // + strand reads are excluded\n                                          // the header is included\n    \n    cmd_line += \" | awk  \\'BEGIN {OFS=\\\"\\\\t\\\"} \" +\n                \"{ \" + \n                \"$4=$4-5; $7=\\\"*\\\"; $8=0; $9=0; $11=\\\"*\\\"; print \" + // read start positions are shifted\n                \"}\\' >> correcting.sam\";\n  }\n  \n  cmd_line += \" ; samtools sort -@ \" + runtime.cores + \" -O bam -T sorting.bam -o \" + inputs.bam.nameroot + \"_\" + inputs.out_suffix + \".bam correcting.sam\";\n  \n  return cmd_line;\n}\n  \n"
-                }
+                "tn5_overhang_correction.sh"
             ],
             "inputs": [
                 {
                     "type": "File",
+                    "inputBinding": {
+                        "position": 1
+                    },
                     "id": "#tn5_overhang_correction.cwl/bam"
                 },
                 {
                     "type": "boolean",
+                    "inputBinding": {
+                        "prefix": "TRUE",
+                        "position": 3
+                    },
                     "id": "#tn5_overhang_correction.cwl/is_paired_end"
                 },
                 {
                     "type": "string",
                     "default": "tn5correct",
+                    "inputBinding": {
+                        "position": 2
+                    },
                     "id": "#tn5_overhang_correction.cwl/out_suffix"
                 }
             ],
@@ -1202,7 +1229,7 @@
                 {
                     "type": "File",
                     "outputBinding": {
-                        "glob": "$(inputs.bam.nameroot + \"_\" + inputs.out_suffix + \".bam\")"
+                        "glob": "$(\"*_\" + inputs.out_suffix + \".bam\")"
                     },
                     "id": "#tn5_overhang_correction.cwl/bam_tn5_corrected"
                 }
