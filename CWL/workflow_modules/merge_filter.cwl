@@ -75,7 +75,7 @@ steps:
     out:
        - bam_sorted_indexed
 
-  qc_duprem:
+  qc:
     doc: fastqc - quality control for reads directly after mapping
     run: "../tools/fastqc.cwl"
     in:
@@ -97,16 +97,16 @@ outputs:
   #bam_merged_duprem_filtered:
   #  type: File
   #  outputSource: filter_by_mapq/bam_filtered
-  duprem_fastqc_zip:
+  fastqc_zip:
     type: 
       type: array
       items: File
-    outputSource: qc_duprem/fastqc_zip
-  duprem_fastqc_html:
+    outputSource: qc/fastqc_zip
+  fastqc_html:
     type: 
       type: array
       items: File
-    outputSource: qc_duprem/fastqc_html
+    outputSource: qc/fastqc_html
   bam:
     type: File
     secondaryFiles: .bai
