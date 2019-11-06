@@ -45,6 +45,16 @@ inputs:
     type: boolean
   effective_genome_size:
     type: long
+  reference_spike_in:
+    type: File
+    secondaryFiles:
+      - .fai
+      - ^.1.bt2
+      - ^.2.bt2
+      - ^.3.bt2
+      - ^.4.bt2
+      - ^.rev.1.bt2
+      - ^.rev.2.bt2
   bin_size:
     type: int?
     default: 10
@@ -53,7 +63,7 @@ inputs:
       type: array
       items: string
     default: ["chrX", "chrY", "chrM"]
-        
+
 ### WORKFLOW STEPS:
 ##################################################
 steps:
@@ -85,8 +95,8 @@ steps:
       - bam
       - bowtie2_log
 
-  merge_duprem_filter:
-    run: "../workflow_modules/merge_duprem_filter.cwl"
+  merge_filter:
+    run: "../workflow_modules/merge_filter.cwl"
     in:
       sample_id:
         source: sample_id
@@ -95,36 +105,35 @@ steps:
       is_paired_end:
         source: is_paired_end
     out:
-      - duprem_fastqc_zip
-      - duprem_fastqc_html
-      - picard_markdup_log
+      - fastqc_zip
+      - fastqc_html
       - bam
-
-  tn5_overhang_correction:
-    run: "../tools/tn5_overhang_correction.cwl"
+  
+  get_spike_in_counts:
+    run: "../workflow_modules/get_spike_in_counts.cwl"
     in:
-      bam:
-        source: merge_duprem_filter/bam
+      fastq1_trimmed:
+        source: trim_and_map/fastq1_trimmed
+      fastq2_trimmed:
+        source: trim_and_map/fastq2_trimmed
+      reference_spike_in:
+        source: reference_spike_in
       is_paired_end:
         source: is_paired_end
+      sample_id:
+        source: sample_id
     out:
-      - bam_tn5_corrected
+      - bam
+      - aln_read_count
+      - aln_read_count_file
 
-  indexing_shifted_bam:
-    run: "../tools/samtools_index_hack.cwl"
-    in:
-      bam_sorted:
-        source: tn5_overhang_correction/bam_tn5_corrected
-    out:
-       - bam_sorted_indexed
-  
   chip_qc:
     run: "../workflow_modules/chip_qc.cwl"
     in:
       sample_id:
         source: sample_id
       bam:
-        source: merge_duprem_filter/bam
+        source: merge_filter/bam
       is_paired_end:
         source: is_paired_end
       user_def_fragment_size:
@@ -140,18 +149,20 @@ steps:
       - qc_phantompeakqualtools_stderr
       - qc_phantompeakqualtools_stdout
       - fragment_size
-
+      
   generate_coverage_tracks:
     run: "../tools/deeptools_bamCoverage.cwl"
     in:
       bam:
-        source: indexing_shifted_bam/bam_sorted_indexed
+        source: merge_filter/bam
       is_paired_end:
         source: is_paired_end
       fragment_size:
         source: chip_qc/fragment_size
       effective_genome_size:
         source: effective_genome_size
+      spike_in_count:
+        source: get_spike_in_counts/aln_read_count
       bin_size:
         source: bin_size
       ignoreForNormalization:
@@ -176,8 +187,8 @@ steps:
       qc_files_array:
         source:
           - trim_and_map/bowtie2_log
-          - merge_duprem_filter/duprem_fastqc_zip
-          - merge_duprem_filter/duprem_fastqc_html
+          - merge_filter/fastqc_zip
+          - merge_filter/fastqc_html
           - chip_qc/qc_plot_coverage_tsv
           - chip_qc/qc_plot_coverage_plot
           - chip_qc/qc_plot_fingerprint_tsv
@@ -186,14 +197,12 @@ steps:
           - chip_qc/qc_crosscorr_plot
           - chip_qc/qc_phantompeakqualtools_stdout
           - chip_qc/qc_crosscorr_summary
-          - merge_duprem_filter/picard_markdup_log
         linkMerge: merge_flattened
       report_name:
         source: sample_id
     out:
       - multiqc_zip
       - multiqc_html
-
 
 ### OUTPUTS:
 ##################################################
@@ -239,27 +248,27 @@ outputs:
       items: File
     outputSource: trim_and_map/bowtie2_log
 
-  duprem_fastqc_zip:
+  fastqc_zip:
     type:
       type: array
       items: File
-    outputSource: merge_duprem_filter/duprem_fastqc_zip
-  duprem_fastqc_html:
+    outputSource: merge_filter/fastqc_zip
+  fastqc_html:
     type:
       type: array
       items: File
-    outputSource: merge_duprem_filter/duprem_fastqc_html
+    outputSource: merge_filter/fastqc_html
   bam:
     type: File
     secondaryFiles: .bai
-    outputSource: merge_duprem_filter/bam
-  picard_markdup_log:
-    type: File
-    outputSource: merge_duprem_filter/picard_markdup_log
+    outputSource: merge_filter/bam
 
-  bam_tn5_corrected:
+  bam_spike_in:
     type: File
-    outputSource: indexing_shifted_bam/bam_sorted_indexed
+    outputSource: get_spike_in_counts/bam
+  spike_in_counts:
+    type: File
+    outputSource: get_spike_in_counts/aln_read_count_file
 
   bigwig:
     type: File
@@ -289,7 +298,7 @@ outputs:
   qc_phantompeakqualtools_stderr:
     type: File?
     outputSource: chip_qc/qc_phantompeakqualtools_stderr
-
+    
   multiqc_zip:
     type: File
     outputSource: create_summary_qc_report/multiqc_zip

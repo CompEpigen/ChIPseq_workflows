@@ -4,10 +4,10 @@ This repository includes workflows for upstream processing of ChIP-seq and Cut&R
 
 ## CWL Workflows:  
 Following workflows are available in the directory `./CWL/workflows`:
-  * `ChIPseq_pipeline.cwl` - works with single or paired end standard ChIPseq data
-  * `ChIPseq_pipeline_spike_in.cwl` - same as above but with support for spike-in normalization
-  * `CUTnRUN_pipeline.cwl` - specialized version of the ChIPseq spike-in pipeline for CUT&RUN
-  * `ChIPmentation_pipeline.cwl` - works with single or paired end ChIPmentation data  
+  * `ChIPseq.cwl` - works with single or paired end standard ChIPseq data
+  * `ChIPseq_spike_in.cwl` - same as above but with support for spike-in normalization
+  * `CUTnRUN.cwl` - specialized version of the ChIPseq spike-in pipeline for CUT&RUN
+  * `ChIPmen_or_ACTseq.cwl` - works with single or paired end ChIPmentation or ACTseq data  
   
 They depend on subworkflows located in `./CWL/workflow_modules` and CommandLineTool wrapper located in `./CWL/tools`.
 
@@ -35,7 +35,7 @@ A log file (the name is ending with `.yaml.log`) will be created for each sample
   
 Example/test run:  
 Please try to run the following tiny test example to check whether your system is correctly configured.
-`bash ./run_cwltool.sh ./CWL/workflows/ChIPseq_pipeline.cwl ./tiny_test/test_main.chip.yml ~/cwl_test`  
+`bash ./run_cwltool.sh ./CWL/workflows/ChIPseq.cwl ./tiny_test/test_main.chip.yml ~/cwl_test`  
   
   
 Terminating a job:  
