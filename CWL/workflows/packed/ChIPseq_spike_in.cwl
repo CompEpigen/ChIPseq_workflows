@@ -2292,9 +2292,7 @@
                     "doc": "List of fastq files containing the first mate of raw reads.\nMuliple files are provided if multiplexing of the same library has been done\non multiple lanes. The reads comming from different fastq files are pooled\nafter alignment. Also see parameter \"fastq2\".\n",
                     "type": {
                         "type": "array",
-                        "items": [
-                            "File"
-                        ]
+                        "items": "File"
                     },
                     "id": "#main/fastq1"
                 },
