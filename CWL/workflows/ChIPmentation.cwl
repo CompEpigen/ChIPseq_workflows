@@ -93,7 +93,7 @@ inputs:
       Bin size used for generation of coverage tracks.
       The larger the bin size the smaller are the coverage tracks, however,
       the less precise is the signal. For single bp resolution set to 1.
-    type: int?
+    type: int
     default: 10
   ignoreForNormalization:
     doc: |
