@@ -71,10 +71,11 @@ inputs:
       prefix: --binSize
       position: 10
   ignoreForNormalization:
-    type:
-      type: array
-      items: string
-    default: ["chrX", "chrY", "chrM"]
+    doc: |
+      List of space-delimited chromosome names that shall be ignored
+      when calculating the scaling factor. 
+    type: string
+    default: "chrX chrY chrM"
     inputBinding:
       prefix: --ignoreForNormalization
       position: 10

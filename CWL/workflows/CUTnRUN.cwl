@@ -32,13 +32,9 @@ inputs:
       - ^.rev.1.bt2
       - ^.rev.2.bt2
   adapter1: 
-    type: 
-      type: array
-      items: [string, "null"]
-  adapter2:
-    type: 
-      type: array
-      items: [string, "null"]
+    type: string?
+  adapter2: 
+    type: string?
   fragment_size:
     type: int?
   is_paired_end:
@@ -58,18 +54,13 @@ inputs:
   bin_size:
     type: int?
     default: 10
-  ignoreForNormalization:
-    type:
-      type: array
-      items: string
-    default: ["chrX", "chrY", "chrM"]
 
 ### WORKFLOW STEPS:
 ##################################################
 steps:
   trim_and_map:
     run: "../workflow_modules/trim_and_map.cwl"
-    scatter: [fastq1, fastq2, adapter1, adapter2]
+    scatter: [fastq1, fastq2]
     scatterMethod: 'dotproduct'
     in:
       fastq1:
