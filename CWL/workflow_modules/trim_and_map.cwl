@@ -120,7 +120,7 @@ outputs:
     type: File
     outputSource: adaptor_trimming_and_qc_trimmed/fastq1_trimmed
   fastq2_trimmed:
-    type: File
+    type: File?
     outputSource: adaptor_trimming_and_qc_trimmed/fastq2_trimmed
   trim_galore_log:
     type:
