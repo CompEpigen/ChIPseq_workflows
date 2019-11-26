@@ -23,7 +23,7 @@ inputs:
       after alignment. Also see parameter "fastq2".
     type: 
       type: array
-      items: [File]
+      items: File
   fastq2: 
     doc: |
       List of fastq files containing the second mate of raw reads in case of paired end
