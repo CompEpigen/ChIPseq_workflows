@@ -72,8 +72,10 @@ inputs:
       position: 10
   ignoreForNormalization:
     doc: |
-      List of space-delimited chromosome names that shall be ignored
+      List of space-delimited chromosome names that shall be ignored 
       when calculating the scaling factor. 
+      Specify as space-delimited string. 
+      Default: "chrX chrY chrM"
     type: string?
     default: "chrX chrY chrM"
     inputBinding:

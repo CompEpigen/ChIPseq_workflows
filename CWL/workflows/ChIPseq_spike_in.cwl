@@ -17,19 +17,19 @@ inputs:
     type: string
   fastq1:
     doc: |
-      List of fastq files containing the first mate of raw reads.
-      Muliple files are provided if multiplexing of the same library has been done
-      on multiple lanes. The reads comming from different fastq files are pooled
-      after alignment. Also see parameter "fastq2".
+      List of fastq files containing the first mate of raw reads. 
+      Muliple files are provided if  multiplexing of the same library has been done 
+      on multiple lanes. The reads comming from different fastq files are pooled 
+      after alignment. Also see parameter "fastq2". 
     type: 
       type: array
       items: File
   fastq2: 
     doc: |
-      List of fastq files containing the second mate of raw reads in case of paired end
-      (also see parameter "fastq1").
-      Important: this list has to be of same length as parameter "fastq1" no matter if paired or single end is used.
-      In case of single end data specify "null" for every entry of fastq1.
+      List of fastq files containing the second mate of raw reads in case of paired end 
+      (also see parameter "fastq1"). 
+      Important: this list has to be of same length as parameter "fastq1" no matter if paired or single end is used. 
+      In case of single end data specify "null" for every entry of fastq1. 
     type:
       type: array
       items: [File, "null"]
@@ -39,35 +39,35 @@ inputs:
     type: boolean
   adapter1: 
     doc: |
-      Adapter sequence for first reads.
-      If not specified (set to "null"), trim_galore will try to autodetect whether ...
-      - Illumina universal adapter (AGATCGGAAGAGC)
-      - Nextera adapter (CTGTCTCTTATA)
-      - Illumina Small RNA 3-prime Adapter (TGGAATTCTCGG)
-      ... was used.
-      You can directly choose one of the above configurations
-      by setting the string to "illumina", "nextera", or "small_rna".
+      Adapter sequence for first reads. 
+      If not specified (set to "null"), trim_galore will try to autodetect whether ...\n
+      - Illumina universal adapter (AGATCGGAAGAGC)\n
+      - Nextera adapter (CTGTCTCTTATA)\n
+      - Illumina Small RNA 3-prime Adapter (TGGAATTCTCGG)\n
+      ... was used.\n
+      You can directly choose one of the above configurations 
+      by setting the string to "illumina", "nextera", or "small_rna". 
       Or you specify the adaptor string manually (e.g. "AGATCGGAAGAGC").
     type: string?
   adapter2: 
     doc: |
-      Adapter sequence for second reads (only relevant for paired end data).
-      If it is not specified (set to "null"), trim_galore will try to autodetect whether ...
-      - Illumina universal adapter (AGATCGGAAGAGC)
-      - Nextera adapter (CTGTCTCTTATA)
-      - Illumina Small RNA 3-prime Adapter (TGGAATTCTCGG)
-      ... was used.
-      You can directly choose one of the above configurations
-      by setting the string to "illumina", "nextera", or "small_rna".
+      Adapter sequence for second reads (only relevant for paired end data). 
+      If it is not specified (set to "null"), trim_galore will try to autodetect whether ...\n
+      - Illumina universal adapter (AGATCGGAAGAGC)\n
+      - Nextera adapter (CTGTCTCTTATA)\n
+      - Illumina Small RNA 3-prime Adapter (TGGAATTCTCGG)\n
+      ... was used.\n
+      You can directly choose one of the above configurations 
+      by setting the string to "illumina", "nextera", or "small_rna". 
       Or you specify the adaptor string manually (e.g. "AGATCGGAAGAGC").
     type: string?
   genome:
     doc: |
-      Path to reference genome in fasta format.
-      Bowtie2 index files (".1.bt2", ".2.bt2", ...) as well as a samtools index (".fai")
-      has to be located in the same directory.
-      All of these files can be downloaded for the most common genome builds at 
-      https://support.illumina.com/sequencing/sequencing_software/igenome.html.
+      Path to reference genome in fasta format. 
+      Bowtie2 index files (".1.bt2", ".2.bt2", ...) as well as a samtools index (".fai") 
+      has to be located in the same directory.\n
+      All of these files can be downloaded for the most common genome builds at  
+      https://support.illumina.com/sequencing/sequencing_software/igenome.html. 
       Alternatively, you can use "bowtie2-build" or "samtools index" to create them yourself.
     type: File
     secondaryFiles:
@@ -80,11 +80,11 @@ inputs:
       - ^.rev.2.bt2
   genome_spike_in:
     doc: |
-      Path to reference of the spike-in organism in fasta format.
-      Bowtie2 index files (".1.bt2", ".2.bt2", ...) as well as a samtools index (".fai")
-      has to be located in the same directory.
-      All of these files can be downloaded for the most common genome builds at 
-      https://support.illumina.com/sequencing/sequencing_software/igenome.html.
+      Path to reference genome of the spike-in organism in fasta format. 
+      Bowtie2 index files (".1.bt2", ".2.bt2", ...) as well as a samtools index (".fai") 
+      has to be located in the same directory.\n
+      All of these files can be downloaded for the most common genome builds at  
+      https://support.illumina.com/sequencing/sequencing_software/igenome.html. 
       Alternatively, you can use "bowtie2-build" or "samtools index" to create them yourself.
     type: File
     secondaryFiles:
@@ -107,15 +107,17 @@ inputs:
     type: long
   bin_size:
     doc: |
-      Bin size used for generation of coverage tracks.
-      The larger the bin size the smaller are the coverage tracks, however,
+      Bin size used for generation of coverage tracks. 
+      The larger the bin size the smaller are the coverage tracks, however, 
       the less precise is the signal. For single bp resolution set to 1.
     type: int
     default: 10
   ignoreForNormalization:
     doc: |
-      List of space-delimited chromosome names that shall be ignored
+      List of space-delimited chromosome names that shall be ignored 
       when calculating the scaling factor. 
+      Specify as space-delimited string. 
+      Default: "chrX chrY chrM"
     type: string?
     default: "chrX chrY chrM"
 
