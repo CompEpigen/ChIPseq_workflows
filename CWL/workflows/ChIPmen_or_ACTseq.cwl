@@ -49,7 +49,7 @@ inputs:
     doc: |
       List of space-delimited chromosome names that shall be ignored
       when calculating the scaling factor. 
-    type: string
+    type: string?
     default: "chrX chrY chrM"
         
 ### WORKFLOW STEPS:
