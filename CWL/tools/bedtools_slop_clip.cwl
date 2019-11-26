@@ -31,7 +31,7 @@ inputs:
     inputBinding:
       prefix: "-i"
       position: 2
-  reference_info:
+  genome_info:
     type: File
     inputBinding:
       prefix: "-g"

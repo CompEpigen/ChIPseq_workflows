@@ -35,8 +35,8 @@ stderr: $( inputs.fastq1.nameroot + ".bowtie2_stderr") # log file
   
 
 inputs:
-  reference_index:
-    doc: path to the FM-index files for the chosen reference genome
+  genome_index:
+    doc: path to the FM-index files for the chosen genome genome
     type: File
     secondaryFiles:
       - .fai

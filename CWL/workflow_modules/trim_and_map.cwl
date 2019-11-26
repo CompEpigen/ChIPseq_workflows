@@ -14,7 +14,7 @@ inputs:
     type: File
   fastq2: 
     type: File?
-  reference:
+  genome:
     type: File
     secondaryFiles:
       - .fai
@@ -77,8 +77,8 @@ steps:
         source: adaptor_trimming_and_qc_trimmed/fastq1_trimmed
       fastq2:
         source: adaptor_trimming_and_qc_trimmed/fastq2_trimmed
-      reference_index:
-        source: reference
+      genome_index:
+        source: genome
       is_paired_end:
         source: is_paired_end
       max_mapping_insert_length:

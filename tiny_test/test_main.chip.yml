@@ -10,10 +10,10 @@ fastq2:
     path: ./sample1_2.fastq
   - class: File
     path: ./sample2_2.fastq
-reference:
+genome:
   class: File
   path: ./ref_genome.fa
-reference_spike_in:
+genome_spike_in:
   class: File
   path: ./ref_genome.fa
 adapter1: 

@@ -18,7 +18,7 @@ inputs:
     type: 
       type: array
       items: [File, "null"]
-  reference_spike_in:
+  genome_spike_in:
     type: File
     secondaryFiles:
       - .fai
@@ -46,8 +46,8 @@ steps:
         source: fastq1_trimmed
       fastq2:
         source: fastq2_trimmed
-      reference_index:
-        source: reference_spike_in
+      genome_index:
+        source: genome_spike_in
       is_paired_end:
         source: is_paired_end
     out:

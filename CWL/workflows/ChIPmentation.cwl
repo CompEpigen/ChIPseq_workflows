@@ -12,16 +12,63 @@ requirements:
 ##################################################
 inputs:
   sample_id:
+    doc: |
+      Sample ID used for naming the output files.
     type: string
   fastq1:
+    doc: |
+      List of fastq files containing the first mate of raw reads.
+      Muliple files are provided if multiplexing of the same library has been done
+      on multiple lanes. The reads comming from different fastq files are pooled
+      after alignment. Also see parameter "fastq2".
     type: 
       type: array
-      items: [File, "null"]
+      items: [File]
   fastq2: 
+    doc: |
+      List of fastq files containing the second mate of raw reads in case of paired end
+      (also see parameter "fastq1").
+      Important: this list has to be of same length as parameter "fastq1" no matter if paired or single end is used.
+      In case of single end data specify "null" for every entry of fastq1.
     type:
       type: array
       items: [File, "null"]
-  reference:
+  is_paired_end:
+    doc: |
+      If paired end data is used set to true, else set to false.
+    type: boolean
+  adapter1: 
+    doc: |
+      Adapter sequence for first reads.
+      If not specified (set to "null"), trim_galore will try to autodetect whether ...
+      - Illumina universal adapter (AGATCGGAAGAGC)
+      - Nextera adapter (CTGTCTCTTATA)
+      - Illumina Small RNA 3-prime Adapter (TGGAATTCTCGG)
+      ... was used.
+      You can directly choose one of the above configurations
+      by setting the string to "illumina", "nextera", or "small_rna".
+      Or you specify the adaptor string manually (e.g. "AGATCGGAAGAGC").
+    type: string?
+  adapter2: 
+    doc: |
+      Adapter sequence for second reads (only relevant for paired end data).
+      If it is not specified (set to "null"), trim_galore will try to autodetect whether ...
+      - Illumina universal adapter (AGATCGGAAGAGC)
+      - Nextera adapter (CTGTCTCTTATA)
+      - Illumina Small RNA 3-prime Adapter (TGGAATTCTCGG)
+      ... was used.
+      You can directly choose one of the above configurations
+      by setting the string to "illumina", "nextera", or "small_rna".
+      Or you specify the adaptor string manually (e.g. "AGATCGGAAGAGC").
+    type: string?
+  genome:
+    doc: |
+      Path to reference genome in fasta format.
+      Bowtie2 index files (".1.bt2", ".2.bt2", ...) as well as a samtools index (".fai")
+      has to be located in the same directory.
+      All of these files can be downloaded for the most common genome builds at 
+      https://support.illumina.com/sequencing/sequencing_software/igenome.html.
+      Alternatively, you can use "bowtie2-build" or "samtools index" to create them yourself.
     type: File
     secondaryFiles:
       - .fai
@@ -31,17 +78,21 @@ inputs:
       - ^.4.bt2
       - ^.rev.1.bt2
       - ^.rev.2.bt2
-  adapter1: 
-    type: string?
-  adapter2:
-    type: string?
   fragment_size:
+    doc: |
+      Mean library fragment size, used to reconstruct entire 
+      fragments from single end reads. Not relevant in case of paired end data.
     type: int?
-  is_paired_end:
-    type: boolean
   effective_genome_size:
+    doc: |
+      The effectively mappable genome size, please see: 
+      https://deeptools.readthedocs.io/en/latest/content/feature/effectiveGenomeSize.html
     type: long
   bin_size:
+    doc: |
+      Bin size used for generation of coverage tracks.
+      The larger the bin size the smaller are the coverage tracks, however,
+      the less precise is the signal. For single bp resolution set to 1.
     type: int?
     default: 10
   ignoreForNormalization:
@@ -63,8 +114,8 @@ steps:
         source: fastq1
       fastq2: 
         source: fastq2
-      reference:
-        source: reference
+      genome:
+        source: genome
       adapter1: 
         source: adapter1
       adapter2:

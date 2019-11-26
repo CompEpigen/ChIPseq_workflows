@@ -23,7 +23,7 @@ inputs:
     inputBinding:
       position: 1
       prefix: "-i"
-  reference_info:
+  genome_info:
     type: File
     inputBinding:
       position: 2

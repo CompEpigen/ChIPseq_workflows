@@ -80,7 +80,7 @@ inputs:
       prefix: --ignoreForNormalization
       position: 10
   spike_in_count:
-    doc: number of reads aligned to the spike in reference, optional
+    doc: number of reads aligned to the spike in genome, optional
     type: long?
     inputBinding:
       position: 10
