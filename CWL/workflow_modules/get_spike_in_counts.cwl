@@ -101,8 +101,6 @@ steps:
     in:
       bam:
         source: duplicate_removal/bam_duprem
-      is_paired_end:
-        source: is_paired_end
     out:
       - aln_read_count_file
       - aln_read_count
