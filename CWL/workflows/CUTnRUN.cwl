@@ -37,6 +37,7 @@ inputs:
     doc: |
       If paired end data is used set to true, else set to false.
     type: boolean
+    default: true
   adapter1: 
     doc: |
       Adapter sequence for first reads. 
