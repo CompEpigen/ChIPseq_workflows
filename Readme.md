@@ -1,4 +1,4 @@
-# CWL-based ChIP-seq and Cut&Run Workflows  
+# CWL-based Workflows for ChIP-seq, Cut&Run, ChIPmentation, and ACTseq  
   
 This repository includes workflows for upstream processing of ChIP-seq and Cut&Run data. The workflows are written in CWL and they are ready to run with a containerization solution like docker or sigularity.
 
@@ -7,7 +7,8 @@ Following workflows are available in the directory `./CWL/workflows`:
   * `ChIPseq.cwl` - works with single or paired end standard ChIPseq data
   * `ChIPseq_spike_in.cwl` - same as above but with support for spike-in normalization
   * `CUTnRUN.cwl` - specialized version of the ChIPseq spike-in pipeline for CUT&RUN
-  * `ChIPmen_or_ACTseq.cwl` - works with single or paired end ChIPmentation or ACTseq data  
+  * `ChIPmenmentaion.cwl` - works with single or paired end ChIPmentation data 
+  * `ACTseq.cwl` - works with single or paired end ACTseq data
   
 They depend on subworkflows located in `./CWL/workflow_modules` and CommandLineTool wrapper located in `./CWL/tools`.
 
