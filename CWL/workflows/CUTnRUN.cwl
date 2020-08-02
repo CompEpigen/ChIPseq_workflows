@@ -123,6 +123,17 @@ inputs:
       Default: "chrX chrY chrM"
     type: string?
     default: "chrX chrY chrM"
+  macs2_qvalue:
+    doc: |
+      Q-value cutoff used for peak calling by MACS2. 
+      The default is 0.05.
+    type: float
+  broad_peaks:
+    doc: |
+      Determines whether the "--broad" flag
+      should be used by MACS2 for peak calling.
+    type: boolean
+    default: false
 
 ### WORKFLOW STEPS:
 ##################################################
@@ -229,6 +240,22 @@ steps:
         source: ignoreForNormalization
     out:
       - bigwig
+
+  peak_calling_macs2:
+    doc: peak calling using macs2
+    run: "../tools/macs2_callpeak.cwl"
+    in:
+      bam:
+        source: merge_filter/bam
+      genome_size:
+        source: effective_genome_size
+      broad: 
+        source: broad_peaks
+      qvalue:
+        source: macs2_qvalue
+    out: 
+      - peaks_bed
+      - peaks_xls
 
   create_summary_qc_report:
     doc: |
@@ -358,6 +385,15 @@ outputs:
   qc_phantompeakqualtools_stderr:
     type: File?
     outputSource: chip_qc/qc_phantompeakqualtools_stderr
+
+  peaks_bed_macs2:
+    type:
+      type: array
+      items: File
+    outputSource: peak_calling_macs2/peaks_bed
+  peaks_xls_macs2:
+    type: File
+    outputSource: peak_calling_macs2/peaks_xls
     
   multiqc_zip:
     type: File
