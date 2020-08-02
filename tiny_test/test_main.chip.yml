@@ -16,12 +16,6 @@ genome:
 genome_spike_in:
   class: File
   path: ./ref_genome.fa
-adapter1: 
-  - "AGT"
-  - "AGT"
-adapter2: 
-  - null
-  - null
 is_paired_end: true
 fragment_size: null
 effective_genome_size: 199

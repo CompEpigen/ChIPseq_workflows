@@ -128,6 +128,7 @@ inputs:
       Q-value cutoff used for peak calling by MACS2. 
       The default is 0.05.
     type: float
+    default: 0.05
   broad_peaks:
     doc: |
       Determines whether the "--broad" flag
